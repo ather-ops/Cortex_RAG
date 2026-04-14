@@ -1,0 +1,153 @@
+print("====================== CineSense AI next level gen AI tool ===================================")
+# step 1: Import libraries
+import pandas as pd
+import numpy as np
+from sentence_transformers import SentenceTransformer
+import chromadb
+import seaborn as sns
+from matplotlib import pyplot as plt
+
+# step 2: Load data with error handling
+try:
+    df=pd.read_csv("netflix_titles.csv")
+    print("file loaded successfully")
+    print("original data \n",df.head())
+except FileNotFoundError:
+    print("File not found check again")
+    exit()
+except Exception as e:
+    print(f"An error occurred: {e}")
+    exit()
+print("=="*60)
+
+# step 3:basic EDA
+print("Basic info:\n",df.info())
+print("=="*60)
+print("Basic Statistic:\n",df.describe())
+print("=="*60)
+print("Missing values :\n",df.isnull().sum())
+print("=="*60)
+print("Columns:\n",df.columns.tolist())
+print("=="*60)
+print("Duplicated values :\n",df.duplicated().sum())
+print("=="*60)
+
+# step 4: Filling missing values
+def analysis(df):
+    for col in df.columns:
+        if df[col].dtype in ['int64', 'float64']:
+            # Agar column 'year' hai, toh mean nahi, median use karo (taaki decimal na aaye)
+            if 'year' in col.lower():
+                df[col] = df[col].fillna(df[col].median())
+            else:
+                df[col] = df[col].fillna(df[col].mean())
+        else:
+            df[col] = df[col].fillna("unknown")
+    return df
+
+analysis(df)
+print("df with filled missing values:\n", df.head())
+print("==" * 40)
+print("Missing values AFTER analysis:\n", df.isnull().sum())
+print("==" * 40)
+
+# step 5:Initial visualisation
+sns.set_theme(style="whitegrid")
+primary_green = "#2ECC71"
+secondary_green = "#27AE60"
+dark_slate = "#2C3E50"
+
+# Graph 1: Distribution pie plot
+plt.figure(figsize=(8,6))
+plt.pie(df["type"].value_counts(),labels=df["type"].value_counts().index,autopct='%1.1f%%')
+plt.title("Content_type:Movies vs TV shows",fontweight="bold",color=dark_slate)
+plt.ylabel("No of Movies")
+plt.show()
+
+# Graph 2: Categorical bar plot
+plt.figure(figsize=(10,6))
+top_countries=df[df["country"]!="Unknown"]["country"].value_counts().head(10)
+sns.barplot(x=top_countries.values,y=top_countries.index,palette="Greens")
+plt.title('Top 10 Content-Producing Countries', fontweight='bold', color=dark_slate)
+plt.xlabel('Number of Titles')
+plt.show()
+
+# Graph 3: Composition plot
+plt.figure(figsize=(10,6))
+genres=df["listed_in"].str.split(',').explode()
+genre_counts=genres.value_counts().head(10)
+sns.barplot(x=genre_counts.values, y=genre_counts.index, color=secondary_green)
+plt.title('Top 10 Most Popular Genres', fontweight='bold', color=dark_slate)
+plt.xlabel('Count')
+plt.show()
+
+# Graph 4: Time Series (Growth Line in Green) ---
+plt.figure(figsize=(12, 6))
+yearly_counts = df.groupby('release_year')['show_id'].count().reset_index()
+sns.lineplot(data=yearly_counts, x='release_year', y='show_id', marker='o', color=primary_green, linewidth=3)
+# Shading the area under the curve in green to show volume
+plt.fill_between(yearly_counts['release_year'], yearly_counts['show_id'], color=primary_green, alpha=0.15)
+plt.title('Content Release Growth Over the Years', fontweight='bold', color=dark_slate)
+plt.xlabel('Year')
+plt.ylabel('Total Titles')
+plt.show()
+
+# Graph 5: Segmentation (Rating Plot)
+plt.figure(figsize=(10, 6))
+rating_order = df['rating'].value_counts().index
+sns.countplot(data=df, x='rating', order=rating_order, color=primary_green)
+plt.title('Audience Segment Distribution', fontweight='bold', color=dark_slate)
+plt.xlabel('Rating Category')
+plt.xticks(rotation=45)
+plt.show()
+
+# step 6: Create a combined data
+df["combined_txt"]=(df["title"]+" "+ df["director"].fillna('')+" "+df["cast"].fillna('')+" "+df["listed_in"]+" "+df["description"])
+
+# step 7: Model selection and embeddings
+model=SentenceTransformer("all-MiniLM-L6-v2")
+try:
+    print("Generating embeddings. This may take a few minutes...")
+    embeddings=model.encode(df["combined_txt"].tolist(), show_progress_bar=True)
+    print("Embeddings generated successfully!")
+except KeyboardInterrupt:
+    print("\nProcess interrupted by user. Taking a smaller sample...")
+    # Use a smaller sample of the data (first 100 rows)
+    sample_df = df.head(100)
+    embeddings=model.encode(sample_df["combined_txt"].tolist(), show_progress_bar=True)
+    df = sample_df
+    print(f"Continuing with {len(df)} items instead")
+except Exception as e:
+    print(f"Error generating embeddings: {e}")
+    exit()
+print("=="*40)
+
+# step 8: Initialise chromadb
+client=chromadb.Client()
+print("Client Created successfully")
+print("=="*40)
+
+# step 9: Creating collections
+# always delete existing collection for clean start
+try:
+    client.delete_collection("netflix_titles")
+    print("Deleted existing collection successfully")
+except:
+    print("No existing collection found!")
+
+# creating new collection
+collection=client.create_collection(
+    name="netflix_titles",
+    metadata={
+       "description":"netflix movies and Tv shows",
+       "total_items":len(df),
+       "total_columns":len(df.columns),
+       "embedding_model":"all-MiniLM-L6-v2"
+    }
+)
+
+print("Collection created successfully:",collection.name)
+print("Initial count :",collection.count())
+print("==="*30)
+print("Day 1 Completed ")
+print("==="*30)
