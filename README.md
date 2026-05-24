@@ -1,35 +1,26 @@
-<div align="center">
+# Cortex-RAG
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,12,20&height=200&section=header&text=Cortex-RAG&fontSize=55&fontColor=fff&animation=twinkling&fontAlignY=38&desc=From%20Embeddings%20to%20Full%20RAG%20Systems%20%E2%80%94%20Built%20From%20Scratch&descAlignY=58&descSize=14" width="100%"/>
+A hands-on repository for building Retrieval Augmented Generation systems from scratch — every concept explained, every line of code written and understood.
 
-[![Python](https://img.shields.io/badge/Python-3.10-f97316?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![SentenceTransformers](https://img.shields.io/badge/SentenceTransformers-Latest-06b6d4?style=for-the-badge&logoColor=white)](https://sbert.net)
-[![Status](https://img.shields.io/badge/Status-Active%20Building-22c55e?style=for-the-badge&logoColor=white)]()
-[![Notebooks](https://img.shields.io/badge/Notebooks-2%20of%205-f97316?style=for-the-badge&logoColor=white)]()
-
-</div>
+RAG means: instead of asking an LLM to remember everything, you give it the ability to search a knowledge base and answer from real retrieved documents. This repository builds that system step by step, starting from what an embedding actually is and ending with a complete working pipeline.
 
 ---
 
-## What is Cortex-RAG?
-
-This repository is a **hands-on RAG system built from scratch** — every concept explained, every line of code written and understood.
-
-RAG = Retrieval Augmented Generation
-
-It means: instead of asking an LLM to remember everything, we give it the ability to **search a knowledge base** and answer from real retrieved documents.
+## How RAG Works
 
 ```
 User Query
     ↓
-Embed query into vector
+Embed query into a vector
     ↓
 Search vector database for similar documents
     ↓
-Pass retrieved documents + query to LLM
+Pass retrieved documents + original query to LLM
     ↓
-LLM generates grounded, accurate answer
+LLM generates a grounded, accurate answer
 ```
+
+The key shift from classical ML: the model is no longer memorizing answers during training. It is retrieving relevant context at inference time and reasoning over it.
 
 ---
 
@@ -37,11 +28,11 @@ LLM generates grounded, accurate answer
 
 ```
 Cortex-RAG/
-├── 01_Embeddings_Basics_to_Advanced.ipynb   ← Start here
-├── 02_Netflix_Semantic_Search_Pipeline.ipynb ← Full pipeline
-├── 03_Vector_Databases_Chroma.ipynb          ← Coming soon
-├── 04_LLM_Response_Generation.ipynb          ← Coming soon
-├── 05_Complete_RAG_System.ipynb              ← Final project
+├── 01_Embeddings_Basics_to_Advanced.ipynb    # Start here
+├── 02_Netflix_Semantic_Search_Pipeline.ipynb  # Full pipeline on real data
+├── 03_Vector_Databases_Chroma.ipynb           # Coming soon
+├── 04_LLM_Response_Generation.ipynb           # Coming soon
+├── 05_Complete_RAG_System.ipynb               # Final project
 ├── Netflix_Dataset.csv
 ├── My_New_Netflix_Dataset.csv
 └── README.md
@@ -52,73 +43,63 @@ Cortex-RAG/
 ## Notebooks
 
 ### 01 — Embeddings: From Zero to Semantic Search
-**What you learn:**
 
-| Concept | Description |
-|---------|-------------|
+Starts at the beginning and builds up to state-of-the-art embeddings without skipping the fundamentals.
+
+| Concept | What it covers |
+|---------|----------------|
 | One-Hot Encoding | Why it fails to capture meaning |
 | Embedding Matrix | How dense vectors solve the problem |
-| Cosine Similarity | Measure meaning — not just spelling |
-| SentenceTransformer | State-of-the-art pretrained embeddings |
-| Semantic Search | Ask anything — find meaning not keywords |
-| Save to CSV | Persist embeddings for reuse |
+| Cosine Similarity | Measuring meaning, not spelling |
+| SentenceTransformer | Pretrained embeddings with MiniLM |
+| Semantic Search | Finding meaning rather than keywords |
+| Saving to CSV | Persisting embeddings for reuse |
 
-**Key insight:** King and Queen are close in embedding space. King and Pizza are far apart. That is how machines understand language.
+The core insight: King and Queen are close in embedding space. King and Pizza are far apart. That geometric relationship is how machines represent language meaning.
 
 ---
 
 ### 02 — Netflix Semantic Search Pipeline
-**Full end-to-end pipeline on real data:**
 
-**EDA Dashboard — 6 Charts:**
+An end-to-end pipeline applied to a real Netflix dataset. Covers exploratory analysis, embedding generation, and semantic search with custom and sklearn cosine similarity implementations side by side.
 
-| Chart | What it shows |
-|-------|--------------|
-| Pie chart | Movies vs TV Shows split |
-| Horizontal bar | Top 10 content-producing countries |
-| Genre bars | Most popular genres on Netflix |
-| Line chart | Content release growth over years |
-| Bar chart | Audience rating distribution |
-| Dual line | Movies vs TV Shows trend over time |
+**EDA covers:** content type split, top producing countries, genre distribution, release year trends, audience ratings, and movies vs TV shows over time.
 
-**Semantic Search Results:**
+**Semantic search results on real queries:**
 
 | Query | Top Result |
 |-------|-----------|
-| "Romantic movies" | Ankahi Kahaniya — love stories |
+| "Romantic movies" | Ankahi Kahaniya — anthology love stories |
 | "Action movies" | Prey — survival thriller |
 | "Steven Spielberg" | Jaws — exact director match |
-| "Comedy movies" | Relevant comedy titles |
-| "Indian content" | Kota Factory, Indian productions |
+| "Indian content" | Kota Factory and related productions |
 
-**Custom vs Sklearn cosine similarity:** Both give identical results. Custom helps you understand the math. Sklearn runs faster at scale.
+**Custom vs sklearn cosine similarity:** both return identical results. The custom implementation shows the math. The sklearn version shows how it scales. Understanding both matters.
 
 ---
 
-## The RAG Learning Path
+### 03 — Vector Databases with Chroma
+
+Coming soon. Covers storing and querying embeddings at scale using ChromaDB rather than in-memory arrays.
+
+### 04 — LLM Response Generation
+
+Coming soon. Connects the retrieval pipeline to a HuggingFace language model to generate answers grounded in retrieved documents.
+
+### 05 — Complete RAG System
+
+The final project. A full pipeline from raw document ingestion to query answering — every component from notebooks 01 through 04 assembled into one working system.
+
+---
+
+## Learning Path
 
 ```
-Week 1  — Notebook 01 + 02 (Embeddings + Semantic Search)
+Week 1  — Notebooks 01 and 02 (Embeddings and Semantic Search)
 Week 2  — Notebook 03 (Chroma vector database)
-Week 3  — Notebook 04 (HuggingFace LLM response)
+Week 3  — Notebook 04 (LLM response generation)
 Week 4  — Notebook 05 (Complete RAG pipeline)
 ```
-
----
-
-## Related Repository
-
-This repo builds on top of foundational ML work done in:
-
-**ML with Scikit-Learn** — github.com/ather-ops/ML-with-Scikit-Learn
-
-That repo covers the complete classical ML pipeline:
-- End-to-end pipelines for classification and regression
-- Feature engineering, EDA, model evaluation
-- ROC curves, AUC, confusion matrix, threshold tuning
-- Production-ready code patterns
-
-**Cortex-RAG is the next level** — moving from classical ML into modern AI with embeddings and language models.
 
 ---
 
@@ -127,28 +108,31 @@ That repo covers the complete classical ML pipeline:
 ```bash
 pip install pandas numpy matplotlib seaborn
 pip install sentence-transformers scikit-learn
-pip install chromadb transformers   # for notebooks 03-05
+pip install chromadb transformers        # required for notebooks 03 to 05
 ```
 
 ---
 
-## Skills Demonstrated
+## Where This Fits
 
-[![Embeddings](https://img.shields.io/badge/Embeddings-From%20Scratch-f97316?style=flat-square)]()
-[![Cosine Similarity](https://img.shields.io/badge/Cosine%20Similarity-Custom%20%2B%20Sklearn-f97316?style=flat-square)]()
-[![Semantic Search](https://img.shields.io/badge/Semantic%20Search-Real%20Data-06b6d4?style=flat-square)]()
-[![SentenceTransformers](https://img.shields.io/badge/SentenceTransformers-MiniLM-06b6d4?style=flat-square)]()
-[![EDA](https://img.shields.io/badge/EDA-6%20Chart%20Dashboard-22c55e?style=flat-square)]()
-[![Error Handling](https://img.shields.io/badge/Error%20Handling-Production%20Ready-22c55e?style=flat-square)]()
+This repository is the next step after classical ML. The foundation work lives in two companion repositories.
+
+| Repository | What it covers |
+|------------|----------------|
+| [Machine-Learning-from-scratch](https://github.com/ather-ops/Machine-Learning-from-scratch) | Linear regression, logistic regression, gradient descent — pure NumPy |
+| [ML-with-Scikit-Learn](https://github.com/ather-ops/ML-with-Scikit-Learn) | Same algorithms using sklearn, pipelines, and real projects |
+| Cortex-RAG (this repo) | Embeddings, semantic search, vector databases, and LLM integration |
+
+The three repositories together form a complete path from ML fundamentals to modern AI systems.
 
 ---
 
-<div align="center">
+## License
 
-[![GitHub](https://img.shields.io/badge/GitHub-ather--ops-f97316?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ather-ops)
-[![Live App](https://img.shields.io/badge/Live%20App-Rain%20Predictor-f97316?style=for-the-badge&logo=streamlit&logoColor=white)](https://rain-predictor-app.streamlit.app)
-[![ML Scratch](https://img.shields.io/badge/Repo-ML%20from%20Scratch-06b6d4?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ather-ops/Machine-Learning-from-scratch)
+MIT. Use freely.
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,12,20&height=100&section=footer" width="100%"/>
+---
 
-</div>
+## Author
+
+[ather-ops](https://github.com/ather-ops)
