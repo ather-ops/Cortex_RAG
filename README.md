@@ -1,3 +1,5 @@
+![Cortex-RAG](https://raw.githubusercontent.com/ather-ops/Cortex_RAG/main/Screensorts/Amazn.png)
+
 # Cortex-RAG
 
 A hands-on repository for building Retrieval Augmented Generation systems from scratch — every concept explained, every line of code written and understood.
@@ -21,22 +23,6 @@ LLM generates a grounded, accurate answer
 ```
 
 The key shift from classical ML: the model is no longer memorizing answers during training. It is retrieving relevant context at inference time and reasoning over it.
-
----
-
-## Repository Structure
-
-```
-Cortex-RAG/
-├── 01_Embeddings_Basics_to_Advanced.ipynb    # Start here
-├── 02_Netflix_Semantic_Search_Pipeline.ipynb  # Full pipeline on real data
-├── 03_Vector_Databases_Chroma.ipynb           # Coming soon
-├── 04_LLM_Response_Generation.ipynb           # Coming soon
-├── 05_Complete_RAG_System.ipynb               # Final project
-├── Netflix_Dataset.csv
-├── My_New_Netflix_Dataset.csv
-└── README.md
-```
 
 ---
 
@@ -92,17 +78,6 @@ The final project. A full pipeline from raw document ingestion to query answerin
 
 ---
 
-## Learning Path
-
-```
-Week 1  — Notebooks 01 and 02 (Embeddings and Semantic Search)
-Week 2  — Notebook 03 (Chroma vector database)
-Week 3  — Notebook 04 (LLM response generation)
-Week 4  — Notebook 05 (Complete RAG pipeline)
-```
-
----
-
 ## Prerequisites
 
 ```bash
@@ -119,7 +94,7 @@ This repository is the next step after classical ML. The foundation work lives i
 
 | Repository | What it covers |
 |------------|----------------|
-| [Machine-Learning-from-scratch](https://github.com/ather-ops/Machine-Learning-from-scratch) | Linear regression, logistic regression, gradient descent — pure NumPy |
+| [Machine-Learning-from-scratch](https://github.com/ather-ops/Machine-Learning-from-scratch) | Full supervised machine learning algorithm — pure NumPy |
 | [ML-with-Scikit-Learn](https://github.com/ather-ops/ML-with-Scikit-Learn) | Same algorithms using sklearn, pipelines, and real projects |
 | Cortex-RAG (this repo) | Embeddings, semantic search, vector databases, and LLM integration |
 
