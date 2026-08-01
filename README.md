@@ -1,4 +1,4 @@
-![Cortex-RAG](https://raw.githubusercontent.com/ather-ops/Cortex_RAG/main/Screensorts/Amazn.png)
+![Cortex-RAG](https://github.com/ather-ops/Cortex_RAG/blob/main/Screensorts/Cortex.png)
 
 # Cortex-RAG
 
